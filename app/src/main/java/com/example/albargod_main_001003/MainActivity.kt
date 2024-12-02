@@ -1,115 +1,66 @@
 package com.example.albargod_main_001003
 
 import android.os.Bundle
-import android.view.View
-import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.albargod_main_001003.databinding.ActivityMainBinding
-
-/**
- * SF: https://stackoverflow.com/questions/55990820/how-to-use-navigation-drawer-and-bottom-navigation-simultaneously-navigation-a/
- *
- * Back button press from any fragment takes you to home fragment (Start fragment)
- * of nav graph
- */
-
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
+        // DrawerLayout 초기화
+        drawerLayout = findViewById(R.id.drawer_layout)
 
-        navController = findNavController(R.id.nav_host_fragment_content_main) //Initialising navController
+        // NavHostFragment에서 NavController 가져오기
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+            ?: throw IllegalStateException("NavHostFragment not found in activity_main.xml")
+        val navController = navHostFragment.navController
+        // Toolbar 설정
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
+// AppBarConfiguration 설정
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.homeFragment, R.id.searchFragment,
-            R.id.detailalbarFragment ),
-            binding.mainDrawerLayout)
+            setOf(R.id.nav_home, R.id.nav_search, R.id.nav_detail),
+            drawerLayout
+        )
 
-        setSupportActionBar(binding.toolbar) //Set toolbar
-        setupActionBarWithNavController(navController, appBarConfiguration) //Setup toolbar with back button and drawer icon according to appBarConfiguration
-        binding.mainBottomNavigationView.setupWithNavController(navController)
-        binding.mainNavigationView.setupWithNavController(navController)
-        setupOnBackPressedHandler()
+
+        // Toolbar와 NavController 연결
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
+
+        // BottomNavigationView와 NavController 연결
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
+
+        // DrawerNavigationView와 NavController 연결
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        NavigationUI.setupWithNavController(navigationView, navController)
+
+        // DrawerLayout 토글 설정
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
-    private fun visibilityNavElements(navController: NavController) {
-
-        //Listen for the change in fragment (navigation) and hide or show drawer or bottom navigation accordingly if required
-        //Modify this according to your need
-        //If you want you can implement logic to deselect(styling) the bottom navigation menu item when drawer item selected using listener
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.reviewofUserFragment -> hideBothNavigation()
-                R.id.settingFragment -> hideBottomNavigation()
-                R.id.userFragment-> hideBottomNavigation()
-                else -> showBothNavigation()
-            }
-        }
-
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp()
     }
-
-    private fun hideBothNavigation() { //Hide both drawer and bottom navigation bar
-        binding.mainBottomNavigationView.visibility = View.GONE
-        binding.mainNavigationView.visibility = View.GONE
-        binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) //To lock navigation drawer so that it don't respond to swipe gesture
-    }
-
-    private fun hideBottomNavigation() { //Hide bottom navigation
-        binding.mainBottomNavigationView.visibility = View.GONE
-        binding.mainNavigationView.visibility = View.VISIBLE
-        binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) //To unlock navigation drawer
-
-        binding.mainNavigationView.setupWithNavController(navController) //Setup Drawer navigation with navController
-    }
-
-    private fun showBothNavigation() {
-        binding.mainBottomNavigationView.visibility = View.VISIBLE
-        binding.mainNavigationView.visibility = View.VISIBLE
-        binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        setupNavControl() //To configure navController with drawer and bottom navigation
-    }
-
-    private fun setupNavControl() {
-        binding.mainNavigationView.setupWithNavController(navController) //Setup Drawer navigation with navController
-        binding.mainBottomNavigationView.setupWithNavController(navController) //Setup Bottom navigation with navController
-    }
-
-    private fun setupOnBackPressedHandler() {
-        // OnBackPressedDispatcher를 사용하여 뒤로가기 버튼 동작 제어
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (binding.mainDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    // Drawer가 열려 있으면 닫음
-                    binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
-                } else {
-                    // 기본 뒤로가기 동작 수행
-                    isEnabled = false // 기존 onBackPressed 호출 허용
-                    onBackPressedDispatcher.onBackPressed()
-                }
-            }
-        })
-    }
-
-
-    override fun onSupportNavigateUp(): Boolean { //Setup appBarConfiguration for back arrow
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
 }

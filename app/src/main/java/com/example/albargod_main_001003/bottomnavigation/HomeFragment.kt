@@ -5,32 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
-import com.example.albargod_main_001003.databinding.FragmentHome2Binding
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.albargod_main_001003.MyAdapter
+import com.example.albargod_main_001003.R
 
 
 class HomeFragment : Fragment() {
 
-    private lateinit var navController: NavController
-    private lateinit var binding: FragmentHome2Binding
-
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: MyAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentHome2Binding.inflate(inflater, container, false)
-        return binding.root
+        val rootView = inflater.inflate(R.layout.fragment_home2, container, false)
+
+        recyclerView = rootView.findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+// Dummy data for RecyclerView
+        val data = List(20) { "Item ${it + 1}" }
+
+        // Set up the adapter
+        adapter = MyAdapter(data)
+        recyclerView.adapter = adapter
+
+        return rootView
+
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        navController = findNavController() //Initialising navController
-
-        //Initialising button click event listener
-
-    }
-
 }
 

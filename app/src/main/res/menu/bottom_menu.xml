@@ -2,18 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/bottom_home"
+        android:id="@+id/nav_home"
         android:title="Home"
         android:icon="@drawable/baseline_home_24"/>
-
     <item
-        android:id="@+id/bottom_search"
+        android:id="@+id/nav_search"
         android:title="Search"
         android:icon="@drawable/baseline_person_24"/>
 
-
     <item
-        android:id="@+id/bottom_detail"
+        android:id="@+id/nav_detail"
         android:title="Detail"
         android:icon="@drawable/baseline_menu_24"/>
 </menu>
