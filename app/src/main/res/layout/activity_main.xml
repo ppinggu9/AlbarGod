@@ -11,14 +11,27 @@
         android:layout_height="match_parent">
 
         <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:collapseIcon="@drawable/baseline_arrow_back_24"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/toolbar_menu">
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transpose"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="left"/>
+
+    </androidx.appcompat.widget.Toolbar>
         <!-- NavHostFragment -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
@@ -28,6 +41,12 @@
             app:navGraph="@navigation/nav_graph"
             app:defaultNavHost="true"
             android:name="androidx.navigation.fragment.NavHostFragment" />
+        <!-- RecyclerView (추가된 부분) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nav_host_fragment" />
 
         <!-- BottomNavigationView -->
         <com.google.android.material.bottomnavigation.BottomNavigationView
