@@ -8,42 +8,60 @@
         android:id="@+id/nav_home"
         android:label="Home"
         android:name="com.example.albargod_main_001003.bottomnavigation.HomeFragment"
-        tools:layout="@layout/fragment_home2" />
+        tools:layout="@layout/fragment_home2">
+        <action
+            android:id="@+id/action_nav_home_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_search"
         android:label="search"
         android:name="com.example.albargod_main_001003.bottomnavigation.SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_nav_search_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_detail"
         android:label="detail"
         android:name="com.example.albargod_main_001003.bottomnavigation.DetailalbarFragment"
-        tools:layout="@layout/fragment_detailalbar" />
+        tools:layout="@layout/fragment_detailalbar" >
+        <action
+            android:id="@+id/action_nav_detail_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_review"
         android:name="com.example.albargod_main_001003.drawerlayout.ReviewofUserFragment"
         android:label="fragment_reviewof_user"
-        tools:layout="@layout/fragment_reviewof_user" />
+        tools:layout="@layout/fragment_reviewof_user" >
+        <action
+            android:id="@+id/action_nav_review_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.example.albargod_main_001003.drawerlayout.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_nav_setting_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_userdetail"
         android:name="com.example.albargod_main_001003.drawerlayout.UserFragment"
         android:label="fragment_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_nav_userdetail_to_nav_searchresult"
+            app:destination="@id/nav_searchresult" />
+    </fragment>
     <fragment
         android:id="@+id/nav_searchresult"
         android:name="com.example.albargod_main_001003.search.SearchResultFragment"
         android:label="fragment_search_result"
-        tools:layout="@layout/fragment_search_result">
-        <!-- 여기서 액션 설정 -->
-        <action
-            android:id="@+id/action_nav_home_to_searchResultFragment"
-            app:destination="@id/nav_searchresult" />
-    </fragment>
-
+        tools:layout="@layout/fragment_search_result" />
 
 </navigation>
